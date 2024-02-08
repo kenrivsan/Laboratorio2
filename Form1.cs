@@ -33,10 +33,6 @@ namespace WindowsFormsApp1
             }
             webBrowser1.Navigate(new Uri(url));
 
-
-
-
-
         }
 
         private void inicioToolStripMenuItem1_Click(object sender, EventArgs e)
