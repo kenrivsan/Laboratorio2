@@ -45,6 +45,7 @@ namespace WindowsFormsApp1
                 webView.CoreWebView2.Navigate(url);
                 Guardar("Historial.txt", comboBox1.Text);
                 comboBox1.Items.Add(url);
+                //codigo de guardo en archivo  txt
                 //MessageBox.Show("Historial?", "¿Quieres guardar el historial?",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
 
