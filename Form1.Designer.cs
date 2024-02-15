@@ -49,7 +49,7 @@ namespace WindowsFormsApp1
             this.navegadorToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1114, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1114, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -94,9 +94,6 @@ namespace WindowsFormsApp1
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "https://github.com",
-            "https://www.youtube.com"});
             this.comboBox1.Location = new System.Drawing.Point(13, 37);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(877, 24);

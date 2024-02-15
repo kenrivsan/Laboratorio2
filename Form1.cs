@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
+using System.IO;
 
 namespace WindowsFormsApp1
 {
@@ -42,12 +43,19 @@ namespace WindowsFormsApp1
 
                 }
                 webView.CoreWebView2.Navigate(url);
+                Guardar("Historial.txt", comboBox1.Text);
+                comboBox1.Items.Add(url);
+                //MessageBox.Show("Historial?", "¿Quieres guardar el historial?",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
 
-            
+        }
 
-            //webBrowser1.Navigate(new Uri(url));
-
+        private void Guardar(string NombreArchivo, string texto)
+        {
+            FileStream flujo = new FileStream(NombreArchivo, FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(flujo);
+            writer.WriteLine(texto);
+            writer.Close();
         }
 
         private void inicioToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -71,8 +79,18 @@ namespace WindowsFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             comboBox1.SelectedIndex = -1;
-            
-            //webBrowser1.GoHome();
+            string fileName = @"C:\Users\kenri\OneDrive\Escritorio\WindowsFormsApp1\bin\Debug\Historial.txt";
+
+            FileStream flujo = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            StreamReader lector = new StreamReader(flujo);
+
+            while (lector.Peek() > -1)
+
+            {
+                string textoleido = lector.ReadLine();
+                comboBox1.Items.Add(textoleido);
+            }
+            lector.Close();
         }
 
         private void webView21_Click(object sender, EventArgs e)
