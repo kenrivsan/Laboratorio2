@@ -14,6 +14,7 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        List<URL> urls = new List<URL>();
         public Form1()
         {
             InitializeComponent();
