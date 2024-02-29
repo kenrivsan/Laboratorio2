@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Laboratorio2
+namespace WindowsFormsApp1
 {
      class clsURL
     {

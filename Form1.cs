@@ -14,7 +14,8 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        List<URL> urls = new List<URL>();
+        //List<URL> urls = new List<URL>();
+        List<clsURL> urls = new List<clsURL>();
         public Form1()
         {
             InitializeComponent();
@@ -30,27 +31,83 @@ namespace WindowsFormsApp1
 
         private void btnIr_Click(object sender, EventArgs e)
         {
-            string url = comboBox1.Text.ToString();
+            //string url = comboBox1.Text.ToString();
+            string urlIngresado = comboBox1.Text.ToString();
             if (webView != null && webView.CoreWebView2 != null)
             {
-                if (!(url.Contains(".")))
+                if (!(urlIngresado.Contains(".com")))
                 {
-                    url = "https://www.google.com/search?q=" + url;
+                    urlIngresado = "https://www.google.com/search?q=" + urlIngresado;
 
                 }
-                else if (!(url.Contains("http://")))
+                else if (!(urlIngresado.Contains("http://")))
                 {
-                    url = "http://" + url;
+                    urlIngresado = "http://" + urlIngresado;
 
                 }
-                webView.CoreWebView2.Navigate(url);
-                Guardar("Historial.txt", comboBox1.Text);
-                comboBox1.Items.Add(url);
+                else if ((urlIngresado.Contains("http://"))&& (urlIngresado.Contains(".com")))
+                {
+                    urlIngresado = urlIngresado+"";
+
+                }
+                webView.CoreWebView2.Navigate(urlIngresado);
+                Guardar("archivo.txt", comboBox1.Text);
+
                 MessageBox.Show("Historial guardo en una carpeta txt");
                 //codigo de guardo en archivo  txt
                 //MessageBox.Show("Historial?", "¿Quieres guardar el historial?",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
+            clsURL urlExiste = urls.Find(u => u.Pagina == urlIngresado);
+            if (urlExiste == null)
+            {
+                clsURL urlNueva = new clsURL();
+                urlNueva.Pagina = urlIngresado;
+                urlNueva.Veces = 1;
+                urlNueva.Fecha = DateTime.Now;
+                urls.Add(urlNueva);
+                grabar("Historial.txt");
+                webView.CoreWebView2.Navigate(urlIngresado);
+            }
+            else
+            {
+                urlExiste.Veces++;
+                urlExiste.Fecha = DateTime.Now;
+                grabar("Historial.txt");
+                webView.CoreWebView2.Navigate(urlExiste.Pagina);
+            }
+        }
+        private void grabar(string fileName)
+        {
+            FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(stream);
+            foreach (var url in urls)
+            {
+                writer.WriteLine(url.Pagina);
+                writer.WriteLine(url.Veces);
+                writer.WriteLine(url.Fecha);
+            }
+            writer.Close();
 
+        }
+        private void leer()
+        {
+            string fileName = "Historial.txt";
+            FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            StreamReader reader = new StreamReader(stream);
+            while (reader.Peek() >-1)
+            {
+                clsURL url = new clsURL();
+                url.Pagina = reader.ReadLine();
+                url.Veces = Convert.ToInt32(reader.ReadLine());
+                url.Fecha = Convert.ToDateTime(reader.ReadLine());
+                urls.Add(url);
+            }
+            reader.Close();
+            comboBox1.DisplayMember = "pagina";
+            comboBox1.DataSource = urls;
+            comboBox1.Refresh();
+
+            
         }
 
         private void Guardar(string NombreArchivo, string texto)
@@ -81,19 +138,8 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            leer();
             comboBox1.SelectedIndex = -1;
-            string fileName = @"C:\Users\kenri\OneDrive\Escritorio\WindowsFormsApp1\bin\Debug\Historial.txt";
-
-            FileStream flujo = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            StreamReader lector = new StreamReader(flujo);
-
-            while (lector.Peek() > -1)
-
-            {
-                string textoleido = lector.ReadLine();
-                comboBox1.Items.Add(textoleido);
-            }
-            lector.Close();
         }
 
         private void webView21_Click(object sender, EventArgs e)
